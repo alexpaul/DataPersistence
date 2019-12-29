@@ -10,3 +10,10 @@ import DataPersistence
 
 dataPersistence.save(item: item)
 ```
+
+#### 2. Retrieving saved items from the documents directory 
+```swift 
+import DataPersistence 
+
+savedItems = dataPersistence.items
+```
