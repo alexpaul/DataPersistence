@@ -38,7 +38,7 @@ public final class DataPersistence<T: Codable>: Savable {
   private var internalElements = [T]()
     
   // FIXME: error????
-  weak var delegate: DataPersistenceDelegate?
+  public weak var delegate: DataPersistenceDelegate?
   // https://gist.github.com/jeffreybergier/4482b0ab0357b08558a09501d60b6d1d
   
   // john sundell - swift tips
