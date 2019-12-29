@@ -37,15 +37,9 @@ public final class DataPersistence<T: Codable>: Savable {
   
   private var internalElements = [T]()
     
-  // FIXME: error????
   public weak var delegate: DataPersistenceDelegate?
-  // https://gist.github.com/jeffreybergier/4482b0ab0357b08558a09501d60b6d1d
   
-  // john sundell - swift tips
-  // https://github.com/JohnSundell/SwiftTips
-  
-  // Generic delegate's in Swift
-  // https://www.152percent.com/blog/2017/4/11/delegates-in-swift
+  public init() {}
   
   public func save(item: T) {
     try? loadAll() // TODO: handle
