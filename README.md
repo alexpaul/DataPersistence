@@ -11,7 +11,17 @@ Persists data to documents directory. Performs CRUD operations. Create. Read. Up
 
 ## Installation 
 
-Currently DataPersistence only has support for Swift package manager. To install copy this github url ```https://github.com/alexpaul/DataPersistence``` and navigate to Xcode. Once in Xcode select File -> Swift Packages -> Add Package Dependency and paste the copied url into the search field in the presented dialog. In the Choose Package Options select the Version Rules option which should be the presented default choice and click Next then Finish. At this point the package should have been installed successfully. 
+Currently DataPersistence only has support for Swift package manager. 
+
+To install copy this github url
+```https://github.com/alexpaul/DataPersistence```  
+Navigate to Xcode and do the following: 
+ - select **File -> Swift Packages -> Add Package Dependency** 
+ - paste the copied url above into the search field in the presented dialog
+ - In the **Choose Package Options** select the Version Rules option (default option). Version rules will update Swift packages based on their relesase versions e.g 1.0.1
+ 
+ Click Next then Finish. 
+ At this point the package should have been installed successfully 🥳 
 
 ## Swift Package Dependencies 
 
