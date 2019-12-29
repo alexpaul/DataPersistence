@@ -41,3 +41,8 @@ import DataPersistence
 
 savedItems = dataPersistence.items
 ```
+
+## License
+
+DataPersistence is released under the MIT license. See [LICENSE](https://github.com/alexpaul/DataPersistence/blob/master/LICENSE) for details.
+
