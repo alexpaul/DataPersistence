@@ -17,7 +17,7 @@ public enum PersistenceError: Error {
 
 // Creating a Savable protocol here enables our DataPersistentDelegate to avoid being an associated constraint protocol
 // this would not allow the DataPersistence class to have a weak var delegate property
-protocol Savable {
+public protocol Savable {
   associatedtype ItemType: Codable
   var items: [ItemType] { get }
 }
@@ -27,7 +27,7 @@ public protocol DataPersistenceDelegate: AnyObject {
   func didRemoveItem<T: Codable>(_ dataPersistence: DataPersistence<T>, item: T)
 }
 
-final class DataPersistence<T: Codable>: Savable {
+public final class DataPersistence<T: Codable>: Savable {
   
   private let filename = "items.plist"
   
