@@ -9,9 +9,7 @@ Persists data to documents directory. Performs CRUD operations. Create. Read. Up
 * Xcode 10.2+ 
 * Swift 5.0+ 
 
-## Installation 
-
-Currently DataPersistence only has support for Swift package manager. 
+## Swift Package Installation 
 
 To install copy this github url
 ```https://github.com/alexpaul/DataPersistence```  
