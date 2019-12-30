@@ -25,20 +25,16 @@ public protocol DataPersistenceDelegate: AnyObject {
 public final class DataPersistence<T: Writeable> {
   
   private let filename = "items.plist"
-  
-  public var items: [T] {
-      return internalElements
-  }
-  
-  private var internalElements = [T]()
-    
+
+  private var items = [T]()
+      
   public weak var delegate: DataPersistenceDelegate?
   
   public init() {}
   
   public func save(item: T) {
-    try? loadAll() // TODO: handle
-    internalElements.append(item)
+    let _ = try? loadItems() // TODO: handle
+    items.append(item)
     try? save()
     delegate?.didAddItem(self, item: item)
   }
@@ -63,32 +59,32 @@ public final class DataPersistence<T: Writeable> {
   }
   
   public func delete(index: Int) {
-    try? loadAll() // TODO: handle
+    let _ = try? loadItems() // TODO: handle
     
-    let item = internalElements[index]
+    let item = items[index]
     
-    internalElements.remove(at: index)
+    items.remove(at: index)
     
-    // save
     try? save()
     
     delegate?.didRemoveItem(self, item: item)
-  }
+  }  
   
-  public func loadAll() throws {
+  public func loadItems() throws -> [T]  {
     let filepath = FileManager.getPath(with: filename, for: .documentsDirectory)
     if FileManager.default.fileExists(atPath: filepath.path) {
       guard let data = FileManager.default.contents(atPath: filepath.path) else {
         throw PersistenceError.noContentsAtPath(filepath.path)
       }
       do {
-        internalElements = try PropertyListDecoder().decode([T].self, from: data)
+        items = try PropertyListDecoder().decode([T].self, from: data)
       } catch {
         throw PersistenceError.propertyListDecodingError(error)
       }
     } else {
       print("\(filename) does not currently exists")
     }
+    return items
   }
   
 }
