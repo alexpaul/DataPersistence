@@ -1,35 +1,51 @@
 import XCTest
 @testable import DataPersistence
 
+struct Person: Codable, Equatable {
+  let name: String
+  let age: Int
+}
+
 final class DataPersistenceTests: XCTestCase {
-  func NOT_WWORKING_testExample() {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct
-    // results.
-    //XCTAssertEqual(DataPersistence().text, "Hello, World!")
+  
+  let dataPersistence = DataPersistence<Person>()
+  let person = Person(name: "John Appleseed", age: 32)
+  
+  override func setUp() {
+    super.setUp()
+  }
+  
+  override func tearDown() {
+    super.tearDown()
   }
   
   func testSaveItem() {
     // arrange
-    struct Person: Codable, Equatable {
-      let name: String
-      let age: Int
-    }
-    
-    let person = Person(name: "John Appleseed", age: 32)
-    let dataPersistence = DataPersistence<Person>()
     let expectedName = "John Appleseed"
-  
+    
     // act
     dataPersistence.save(item: person)
     
-    // assert
     let results = try? dataPersistence.loadItems()
+    
+    // assert
     XCTAssertEqual(results?.first?.name, expectedName)
   }
   
+  func testItemHasBeenSaved() {
+    // act
+    let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person)
+    
+    // assert
+    XCTAssertEqual(itemHasBeenSaved, true)
+  }
   
-  static var allTests = [
-    ("testSaveItem", testSaveItem),
-  ]
+  func testRemoveAllItems() {
+    // act
+    dataPersistence.removeAll()
+    let items = try? dataPersistence.loadItems()
+    
+    // assert
+    XCTAssertEqual(items?.count ?? 0, 0)
+  }
 }

@@ -25,9 +25,9 @@ public protocol DataPersistenceDelegate: AnyObject {
 public final class DataPersistence<T: Writeable> {
   
   private let filename = "items.plist"
-
+  
   private var items = [T]()
-      
+  
   public weak var delegate: DataPersistenceDelegate?
   
   public init() {}
@@ -52,23 +52,34 @@ public final class DataPersistence<T: Writeable> {
     }
   }
   
-  private func hasBeenSaved(item: T) -> Bool {
-    //let itemFound = internalElements.firstIndex{ $0 == item }
-    
-    return false
+  public func hasItemBeenSaved(item: T) -> Bool {
+    guard let items = try? loadItems() else {
+      return false
+    }
+    self.items = items
+    let itemIndex = self.items.firstIndex { $0 == item }
+    guard let _ = itemIndex else {
+      return false
+    }
+    return true
   }
   
   public func delete(index: Int) {
-    let _ = try? loadItems() // TODO: handle
-    
+    let _ = try? loadItems()
     let item = items[index]
-    
     items.remove(at: index)
-    
     try? save()
-    
     delegate?.didRemoveItem(self, item: item)
-  }  
+  }
+  
+  public func removeAll() {
+    guard let loadedItems = try? loadItems() else {
+      return
+    }
+    items = loadedItems
+    items.removeAll()
+    try? save()
+  }
   
   public func loadItems() throws -> [T]  {
     let filepath = FileManager.getPath(with: filename, for: .documentsDirectory)
