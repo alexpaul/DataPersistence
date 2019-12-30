@@ -32,6 +32,21 @@ final class DataPersistenceTests: XCTestCase {
     XCTAssertEqual(results?.first?.name, expectedName)
   }
   
+  func testNoDuplicateSaving() {
+    // arrange
+    let expectedCount = 1
+    
+    // act
+    dataPersistence.save(item: person)
+    dataPersistence.save(item: person)
+    dataPersistence.save(item: person)
+    
+    let results = try? dataPersistence.loadItems()
+    
+    // assert
+    XCTAssertEqual(results?.count ?? 0, expectedCount)
+  }
+  
   func testItemHasBeenSaved() {
     // act
     let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person)

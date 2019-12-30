@@ -33,7 +33,10 @@ public final class DataPersistence<T: Writeable> {
   public init() {}
   
   public func save(item: T) {
-    let _ = try? loadItems() // TODO: handle
+    let _ = try? loadItems()
+    guard !hasItemBeenSaved(item: item) else {
+      return
+    }
     items.append(item)
     try? save()
     delegate?.didAddItem(self, item: item)
