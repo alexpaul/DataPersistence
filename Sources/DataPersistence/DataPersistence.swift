@@ -61,6 +61,10 @@ public final class DataPersistence<T: Codable>: Savable {
     }
   }
   
+  private func hasBeenSaved(item: T) -> Bool {
+    return false
+  }
+  
   public func delete(index: Int) {
     try? loadAll() // TODO: handle
     
