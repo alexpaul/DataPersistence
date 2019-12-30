@@ -15,19 +15,14 @@ public enum PersistenceError: Error {
   case noContentsAtPath(String)
 }
 
-// Creating a Savable protocol here enables our DataPersistentDelegate to avoid being an associated constraint protocol
-// this would not allow the DataPersistence class to have a weak var delegate property
-public protocol Savable {
-  associatedtype ItemType: Codable
-  var items: [ItemType] { get }
-}
+public typealias Writeable = Codable & Equatable
 
 public protocol DataPersistenceDelegate: AnyObject {
-  func didAddItem<T: Codable>(_ dataPersistence: DataPersistence<T>, item: T)
-  func didRemoveItem<T: Codable>(_ dataPersistence: DataPersistence<T>, item: T)
+  func didAddItem<T: Writeable>(_ dataPersistence: DataPersistence<T>, item: T)
+  func didRemoveItem<T: Writeable>(_ dataPersistence: DataPersistence<T>, item: T)
 }
 
-public final class DataPersistence<T: Codable>: Savable {
+public final class DataPersistence<T: Writeable> {
   
   private let filename = "items.plist"
   
@@ -62,6 +57,8 @@ public final class DataPersistence<T: Codable>: Savable {
   }
   
   private func hasBeenSaved(item: T) -> Bool {
+    //let itemFound = internalElements.firstIndex{ $0 == item }
+    
     return false
   }
   
