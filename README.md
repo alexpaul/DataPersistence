@@ -39,7 +39,7 @@ dataPersistence.save(item: item)
 ```swift 
 import DataPersistence 
 
-savedItems = dataPersistence.items
+savedItems = try? dataPersistence.loadItems()
 ```
 
 ## License
