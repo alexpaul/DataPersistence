@@ -42,6 +42,13 @@ import DataPersistence
 savedItems = try? dataPersistence.loadItems()
 ```
 
+#### 3. Deleting a saved item from the documents directory 
+```swift 
+import DataPersistence 
+
+dataPersistence.delete(index: index)
+```
+
 ## License
 
 DataPersistence is released under the MIT license. See [LICENSE](https://github.com/alexpaul/DataPersistence/blob/master/LICENSE) for details.
