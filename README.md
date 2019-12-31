@@ -68,12 +68,6 @@ dataPersistence.removeAll()
 ```swift 
 import DataPersistence 
 
-let dataPersistence = DataPersistence<Person>()
-
-let person = Person(name: "John Appleseed", age: 32)
-
-dataPersistence.save(item: person)
-
 let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person) // true 
 ```
 
