@@ -68,7 +68,7 @@ dataPersistence.removeAll()
 ```swift 
 import DataPersistence 
 
-let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person) // true 
+let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person) // true or false 
 ```
 
 ## License
