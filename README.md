@@ -29,6 +29,9 @@ Navigate to Xcode and do the following:
 ## Usage 
 
 #### 1. Creating a DataPersistence instance 
+
+> DataPersistence takes a generic type. The generic has two protocol contraints: **Codable** and **Equatable**
+
 ```swift 
 let dataPersistence = DataPersistence<Person>()
 ```
