@@ -33,8 +33,14 @@ Navigate to Xcode and do the following:
 > DataPersistence takes a generic type. The generic has two protocol contraints: **Codable** and **Equatable**
 
 ```swift 
-let dataPersistence = DataPersistence<Person>()
+let dataPersistence = DataPersistence<Person>() // default filename will be "items"
 ```
+
+```swift 
+let dataPersistence = DataPersistence<Person>(with: "podcasts") // here a custom filename is supplied to the initializer
+```
+
+> All file extensions are .plist (property list) files. File extensions are provided by default and ONLY works with .plist. 
 
 #### 2. Saving an item to the documents directory 
 ```swift 
