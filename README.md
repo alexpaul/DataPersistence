@@ -49,6 +49,13 @@ import DataPersistence
 dataPersistence.delete(index: index)
 ```
 
+#### 4. Remove all saved items from the documents directory 
+```swift 
+import DataPersistence 
+
+dataPersistence.removeAll()
+```
+
 ## License
 
 DataPersistence is released under the MIT license. See [LICENSE](https://github.com/alexpaul/DataPersistence/blob/master/LICENSE) for details.
