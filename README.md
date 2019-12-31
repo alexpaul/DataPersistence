@@ -37,7 +37,8 @@ let dataPersistence = DataPersistence<Person>() // default filename will be "ite
 ```
 
 ```swift 
-let dataPersistence = DataPersistence<Person>(with: "podcasts") // here a custom filename is supplied to the initializer
+// here a custom filename is supplied to the initializer
+let dataPersistence = DataPersistence<Person>(with: "podcasts") 
 ```
 
 > All file extensions are .plist (property list) files. File extensions are provided by default and ONLY works with .plist. 
