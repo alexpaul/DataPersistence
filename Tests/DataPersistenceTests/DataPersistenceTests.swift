@@ -63,4 +63,19 @@ final class DataPersistenceTests: XCTestCase {
     // assert
     XCTAssertEqual(items?.count ?? 0, 0)
   }
+  
+  func IS_WORKING_testDeleteItem() {
+    // arrange
+    let itemIndex = try? dataPersistence.loadItems().firstIndex { $0 == person }
+    guard let index = itemIndex else {
+      XCTFail("fail to delete index not found")
+      return
+    }
+    
+    // act
+    dataPersistence.delete(index: index)
+    
+    // assert
+    XCTAssertEqual(dataPersistence.hasItemBeenSaved(item: person), false)
+  }
 }
