@@ -28,32 +28,50 @@ Navigate to Xcode and do the following:
 
 ## Usage 
 
-#### 1. Saving an item to the documents directory 
+#### 1. Creating a DataPersistence instance 
+```swift 
+let dataPersistence = DataPersistence<Person>()
+```
+
+#### 2. Saving an item to the documents directory 
 ```swift 
 import DataPersistence 
 
 dataPersistence.save(item: item)
 ```
 
-#### 2. Retrieving saved items from the documents directory 
+#### 3. Retrieving saved items from the documents directory 
 ```swift 
 import DataPersistence 
 
 savedItems = try? dataPersistence.loadItems()
 ```
 
-#### 3. Deleting a saved item from the documents directory 
+#### 4. Deleting a saved item from the documents directory 
 ```swift 
 import DataPersistence 
 
 dataPersistence.delete(index: index)
 ```
 
-#### 4. Remove all saved items from the documents directory 
+#### 5. Remove all saved items from the documents directory 
 ```swift 
 import DataPersistence 
 
 dataPersistence.removeAll()
+```
+
+#### 6. Check if a particular item has already been saved to the documents directory 
+```swift 
+import DataPersistence 
+
+let dataPersistence = DataPersistence<Person>()
+
+let person = Person(name: "John Appleseed", age: 32)
+
+dataPersistence.save(item: person)
+
+let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person) // true 
 ```
 
 ## License
