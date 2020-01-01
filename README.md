@@ -28,18 +28,54 @@ Navigate to Xcode and do the following:
 
 ## Usage 
 
-#### 1. Saving an item to the documents directory 
+#### 1. Creating a DataPersistence instance 
+
+> DataPersistence takes a generic type. The generic has two protocol contraints: **Codable** and **Equatable**
+
+```swift 
+let dataPersistence = DataPersistence<Person>() // default filename will be "items"
+```
+
+```swift 
+// here a custom filename is supplied to the initializer
+let dataPersistence = DataPersistence<Person>(with: "podcasts") 
+```
+
+> All file extensions are .plist (property list) files. File extensions are provided by default and ONLY works with .plist. 
+
+#### 2. Saving an item to the documents directory 
 ```swift 
 import DataPersistence 
 
 dataPersistence.save(item: item)
 ```
 
-#### 2. Retrieving saved items from the documents directory 
+#### 3. Retrieving saved items from the documents directory 
 ```swift 
 import DataPersistence 
 
 savedItems = try? dataPersistence.loadItems()
+```
+
+#### 4. Deleting a saved item from the documents directory 
+```swift 
+import DataPersistence 
+
+dataPersistence.delete(index: index)
+```
+
+#### 5. Remove all saved items from the documents directory 
+```swift 
+import DataPersistence 
+
+dataPersistence.removeAll()
+```
+
+#### 6. Check if a particular item has already been saved to the documents directory 
+```swift 
+import DataPersistence 
+
+let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person) // true or false 
 ```
 
 ## License
