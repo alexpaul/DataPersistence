@@ -8,7 +8,7 @@ struct Person: Codable, Equatable {
 
 final class DataPersistenceTests: XCTestCase {
   
-  let dataPersistence = DataPersistence<Person>()
+  let dataPersistence = DataPersistence<Person>(with: "podcasts")
   let person = Person(name: "John Appleseed", age: 32)
   
   override func setUp() {
@@ -47,7 +47,7 @@ final class DataPersistenceTests: XCTestCase {
     XCTAssertEqual(results?.count ?? 0, expectedCount)
   }
   
-  func testItemHasBeenSaved() {
+  func IS_WORKING_testItemHasBeenSaved() {
     // act
     let itemHasBeenSaved = dataPersistence.hasItemBeenSaved(item: person)
     
@@ -58,6 +58,7 @@ final class DataPersistenceTests: XCTestCase {
   func testRemoveAllItems() {
     // act
     dataPersistence.removeAll()
+    
     let items = try? dataPersistence.loadItems()
     
     // assert

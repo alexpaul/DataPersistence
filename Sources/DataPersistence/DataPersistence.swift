@@ -24,13 +24,15 @@ public protocol DataPersistenceDelegate: AnyObject {
 
 public final class DataPersistence<T: Writeable> {
   
-  private let filename = "items.plist"
+  private let filename: String
   
   private var items = [T]()
   
   public weak var delegate: DataPersistenceDelegate?
   
-  public init() {}
+  public init(with filename: String = "items") {
+    self.filename = filename + ".plist"
+  }
   
   public func save(item: T) {
     let _ = try? loadItems()
