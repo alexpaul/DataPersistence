@@ -8,73 +8,115 @@
 
 import Foundation
 
-public enum PersistenceError: Error {
+public enum DataPersistenceError: Error {
   case propertyListEncodingError(Error)
   case propertyListDecodingError(Error)
   case writingError(Error)
+  case deletingError
   case noContentsAtPath(String)
 }
 
-public typealias Writeable = Codable & Equatable
-
 public protocol DataPersistenceDelegate: AnyObject {
-  func didAddItem<T: Writeable>(_ dataPersistence: DataPersistence<T>, item: T)
-  func didRemoveItem<T: Writeable>(_ dataPersistence: DataPersistence<T>, item: T)
+  func didSaveItem<T: Codable>(_ persistenceHelper: DataPersistence<T>, item: T)
+  func didDeleteItem<T: Codable>(_ persistenceHelper: DataPersistence<T>, item: T)
 }
+
+public typealias Writeable = Codable & Equatable
 
 public final class DataPersistence<T: Writeable> {
   
   private let filename: String
   
-  private var items = [T]()
+  private var items: [T]
   
   public weak var delegate: DataPersistenceDelegate?
-  
-  public init(with filename: String = "items") {
-    self.filename = filename + ".plist"
+    
+  public init(filename: String) {
+    self.filename = filename
+    self.items = []
   }
   
-  public func save(item: T) {
-    let _ = try? loadItems()
-    guard !hasItemBeenSaved(item: item) else {
-      return
-    }
-    items.append(item)
-    try? save()
-    delegate?.didAddItem(self, item: item)
-  }
-  
-  private func save() throws {
+  private func saveItemsToDocumentsDirectory() throws {
     do {
+      let url = FileManager.getPath(with: filename, for: .documentsDirectory)
       let data = try PropertyListEncoder().encode(items)
-      let filepath = FileManager.getPath(with: filename, for: .documentsDirectory)
-      try data.write(to: filepath)
-      print(filepath)
-    } catch PersistenceError.propertyListDecodingError(let error) {
-      print("encoding error: \(error)")
-    } catch PersistenceError.writingError(let error) {
-      print("writing error: \(error)")
+      try data.write(to: url, options: .atomic)
+    } catch {
+      throw DataPersistenceError.writingError(error)
     }
   }
   
-  public func hasItemBeenSaved(item: T) -> Bool {
+  // Create
+  public func createItem(_ item: T) throws {
+    _ = try? loadItems()
+    items.append(item)
+    do {
+      try saveItemsToDocumentsDirectory()
+      delegate?.didSaveItem(self, item: item)
+    } catch {
+      throw DataPersistenceError.writingError(error)
+    }
+  }
+  
+  // Read
+  public func loadItems() throws -> [T] {
+    let path = FileManager.getPath(with: filename, for: .documentsDirectory).path
+     if FileManager.default.fileExists(atPath: path) {
+       if let data = FileManager.default.contents(atPath: path) {
+         do {
+           items = try PropertyListDecoder().decode([T].self, from: data)
+         } catch {
+          throw DataPersistenceError.propertyListDecodingError(error)
+         }
+       }
+     }
+    return items
+  }
+  
+  // for re-ordering, and keeping date in sync
+  public func synchronize(_ items: [T]) {
+    self.items = items
+    try? saveItemsToDocumentsDirectory()
+  }
+  
+  // Update
+  @discardableResult
+  public func update(_ item: T, at index: Int) -> Bool {
+    items[index] = item
+    try? saveItemsToDocumentsDirectory()
+    return true
+  }
+  
+  @discardableResult
+  public func update(_ oldItem: T, with newItem: T) -> Bool {
+    if let index = items.firstIndex(of: oldItem) {
+      update(newItem, at: index)
+      return true
+    }
+    return false
+  }
+  
+  // Delete
+  public func deleteItem(at index: Int) throws {
+    let deletedItem = items[index]
+    items.remove(at: index)
+    do {
+      try saveItemsToDocumentsDirectory()
+      delegate?.didDeleteItem(self, item: deletedItem)
+    } catch {
+      throw DataPersistenceError.deletingError
+    }
+  }
+  
+  public func hasItemBeenSaved(_ item: T) -> Bool {
     guard let items = try? loadItems() else {
       return false
     }
     self.items = items
-    let itemIndex = self.items.firstIndex { $0 == item }
-    guard let _ = itemIndex else {
-      return false
+    if let _ = self.items.firstIndex(of: item) {
+      return true
     }
-    return true
-  }
-  
-  public func delete(index: Int) {
-    let _ = try? loadItems()
-    let item = items[index]
-    items.remove(at: index)
-    try? save()
-    delegate?.didRemoveItem(self, item: item)
+    return false
   }
   
   public func removeAll() {
@@ -83,24 +125,6 @@ public final class DataPersistence<T: Writeable> {
     }
     items = loadedItems
     items.removeAll()
-    try? save()
+    try? saveItemsToDocumentsDirectory()
   }
-  
-  public func loadItems() throws -> [T]  {
-    let filepath = FileManager.getPath(with: filename, for: .documentsDirectory)
-    if FileManager.default.fileExists(atPath: filepath.path) {
-      guard let data = FileManager.default.contents(atPath: filepath.path) else {
-        throw PersistenceError.noContentsAtPath(filepath.path)
-      }
-      do {
-        items = try PropertyListDecoder().decode([T].self, from: data)
-      } catch {
-        throw PersistenceError.propertyListDecodingError(error)
-      }
-    } else {
-      print("\(filename) does not currently exists")
-    }
-    return items
-  }
-  
 }
