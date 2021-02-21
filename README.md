@@ -47,7 +47,7 @@ let dataPersistence = DataPersistence<Person>(with: "podcasts")
 ```swift 
 import DataPersistence 
 
-dataPersistence.save(item: item)
+dataPersistence.createItem(item)
 ```
 
 ## 3. Retrieving saved items from the documents directory 
